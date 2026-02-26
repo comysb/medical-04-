@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HABIO - 3-2 Stack Calendar</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', sans-serif;
+            background: #fef3c7;
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 428px;
+            margin: 0 auto;
+            min-height: 100vh;
+        }
+        
+        /* Header */
+        .header {
+            padding: 16px 20px;
+            background: #fef3c7;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 22px;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 12px;
+        }
+        
+        .month-selector {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .month-arrow {
+            font-size: 24px;
+            cursor: pointer;
+            color: #6b7280;
+            transition: color 0.2s;
+        }
+        
+        .month-arrow:hover {
+            color: #1f2937;
+        }
+        
+        .current-month {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+        
+        /* Streak Summary */
+        .streak-summary {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
+            background: white;
+            border-radius: 20px;
+            margin: 0 20px 24px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .streak-stat {
+            text-align: center;
+        }
+        
+        .streak-stat-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+        
+        .streak-stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 4px;
+        }
+        
+        .streak-stat-label {
+            font-size: 13px;
+            color: #6b7280;
+            font-weight: 600;
+        }
+        
+        /* Calendar */
+        .calendar-container {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin: 0 20px 24px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .calendar-header {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .calendar-day-label {
+            text-align: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: #6b7280;
+            padding: 8px 0;
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+        }
+        
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            position: relative;
+        }
+        
+        .calendar-day.empty {
+            color: transparent;
+        }
+        
+        .calendar-day.future {
+            color: #d1d5db;
+        }
+        
+        .calendar-day.completed {
+            background: #dcfce7;
+            color: #16a34a;
+            border: 2px solid #22c55e;
+        }
+        
+        .calendar-day.completed::after {
+            content: '🔥';
+            position: absolute;
+            font-size: 10px;
+            bottom: 2px;
+            right: 2px;
+        }
+        
+        .calendar-day.missed {
+            background: #fef2f2;
+            color: #ef4444;
+            border: 2px solid #fca5a5;
+        }
+        
+        .calendar-day.today {
+            background: #dbeafe;
+            color: #2563eb;
+            border: 3px solid #3b82f6;
+            font-weight: bold;
+        }
+        
+        .calendar-day.freeze {
+            background: #e0f2fe;
+            color: #0284c7;
+            border: 2px solid #38bdf8;
+        }
+        
+        .calendar-day.freeze::after {
+            content: '❄️';
+            position: absolute;
+            font-size: 10px;
+            bottom: 2px;
+            right: 2px;
+        }
+        
+        /* Monthly Stats */
+        .monthly-stats {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin: 0 20px 24px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .monthly-stats-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 16px;
+        }
+        
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        
+        .stat-row:last-child {
+            border-bottom: none;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #6b7280;
+        }
+        
+        .stat-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #1f2937;
+        }
+        
+        /* Bottom Tab Bar */
+        .bottom-tab-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0 20px 0;
+            max-width: 428px;
+            margin: 0 auto;
+        }
+        
+        .tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 16px;
+            cursor: pointer;
+            text-decoration: none;
+            color: #9ca3af;
+            transition: color 0.2s;
+        }
+        
+        .tab-item.active {
+            color: #22c55e;
+        }
+        
+        .tab-icon {
+            font-size: 24px;
+        }
+        
+        .tab-label {
+            font-size: 11px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Stack Calendar</h1>
+            <div class="month-selector">
+                <div class="month-arrow" onclick="previousMonth()">◀</div>
+                <div class="current-month" id="currentMonth">January 2026</div>
+                <div class="month-arrow" onclick="nextMonth()">▶</div>
+            </div>
+        </div>
+        
+        <!-- Streak Summary -->
+        <div class="streak-summary">
+            <div class="streak-stat">
+                <div class="streak-stat-icon">🔥</div>
+                <div class="streak-stat-value">6</div>
+                <div class="streak-stat-label">현재 Stack</div>
+            </div>
+            <div class="streak-stat">
+                <div class="streak-stat-icon">⭐</div>
+                <div class="streak-stat-value">14</div>
+                <div class="streak-stat-label">Best Stack</div>
+            </div>
+            <div class="streak-stat">
+                <div class="streak-stat-icon">❄️</div>
+                <div class="streak-stat-value">0</div>
+                <div class="streak-stat-label">Freezes</div>
+            </div>
+        </div>
+        
+        <!-- Calendar -->
+        <div class="calendar-container">
+            <div class="calendar-header">
+                <div class="calendar-day-label">Sun</div>
+                <div class="calendar-day-label">Mon</div>
+                <div class="calendar-day-label">Tue</div>
+                <div class="calendar-day-label">Wed</div>
+                <div class="calendar-day-label">Thu</div>
+                <div class="calendar-day-label">Fri</div>
+                <div class="calendar-day-label">Sat</div>
+            </div>
+            <div class="calendar-grid" id="calendarGrid">
+                <!-- Calendar days will be generated by JavaScript -->
+            </div>
+        </div>
+        
+        <!-- Monthly Stats -->
+        <div class="monthly-stats">
+            <div class="monthly-stats-title">Monthly Stacking</div>
+            <div class="stat-row">
+                <div class="stat-label">이번 달 Stack LS</div>
+                <div class="stat-value">2,299</div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-label">완료한 퀘스트</div>
+                <div class="stat-value">4</div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-label">습관화 일수</div>
+                <div class="stat-value">6 / 31</div>
+            </div>
+        </div>
+        
+        <!-- Bottom Tab Bar -->
+        <div class="bottom-tab-bar">
+            <a href="/home" class="tab-item">
+                <div class="tab-icon">🏠</div>
+                <div class="tab-label">Home</div>
+            </a>
+            <a href="/quests" class="tab-item">
+                <div class="tab-icon">🎯</div>
+                <div class="tab-label">Quests</div>
+            </a>
+            <a href="/league" class="tab-item">
+                <div class="tab-icon">🏆</div>
+                <div class="tab-label">League</div>
+            </a>
+            <a href="/report" class="tab-item">
+                <div class="tab-icon">📊</div>
+                <div class="tab-label">Report</div>
+            </a>
+            <a href="/profile" class="tab-item">
+                <div class="tab-icon">👤</div>
+                <div class="tab-label">Profile</div>
+            </a>
+        </div>
+    </div>
+    
+    <script>
+        // Generate calendar for January 2026
+        function generateCalendar() {
+            const grid = document.getElementById('calendarGrid');
+            grid.innerHTML = '';
+            
+            // January 2026 starts on Thursday (4th day, 0-indexed: 3)
+            const startDay = 4; // Thursday
+            const daysInMonth = 31;
+            const today = 5; // Assuming today is Jan 5
+            
+            // Completed days (example: 1-5 are completed with streak)
+            const completedDays = [1, 2, 3, 4, 5];
+            const missedDays = [];
+            const freezeDays = [];
+            
+            // Add empty cells for days before month starts
+            for (let i = 0; i < startDay; i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.className = 'calendar-day empty';
+                emptyDay.textContent = '';
+                grid.appendChild(emptyDay);
+            }
+            
+            // Add days of the month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayCell = document.createElement('div');
+                dayCell.className = 'calendar-day';
+                dayCell.textContent = day;
+                
+                if (day === today) {
+                    dayCell.classList.add('today');
+                } else if (completedDays.includes(day)) {
+                    dayCell.classList.add('completed');
+                } else if (missedDays.includes(day)) {
+                    dayCell.classList.add('missed');
+                } else if (freezeDays.includes(day)) {
+                    dayCell.classList.add('freeze');
+                } else if (day > today) {
+                    dayCell.classList.add('future');
+                }
+                
+                grid.appendChild(dayCell);
+            }
+        }
+        
+        function previousMonth() {
+            alert('Previous month functionality');
+        }
+        
+        function nextMonth() {
+            alert('Next month functionality');
+        }
+        
+        // Initialize calendar
+        generateCalendar();
+    </script>
+</body>
+</html>

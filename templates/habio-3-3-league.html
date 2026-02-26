@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HABIO - 3-3 League</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', sans-serif;
+            background: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%);
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 428px;
+            margin: 0 auto;
+            min-height: 100vh;
+        }
+        
+        /* Header */
+        .header {
+            padding: 24px 20px;
+            text-align: center;
+            color: white;
+        }
+        
+        .league-badge {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 16px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .league-name {
+            font-size: 26px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .time-left {
+            font-size: 14px;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+        
+        /* Leaderboard */
+        .leaderboard-container {
+            background: white;
+            border-radius: 24px 24px 0 0;
+            padding: 24px 20px;
+            margin-top: 24px;
+            min-height: 60vh;
+        }
+        
+        .leaderboard-header {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .leaderboard-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: #f9fafb;
+            border-radius: 16px;
+            transition: all 0.2s;
+        }
+        
+        .leaderboard-item.you {
+            background: #dcfce7;
+            border: 2px solid #22c55e;
+        }
+        
+        .leaderboard-item.top3 {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        }
+        
+        .rank {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            color: #6b7280;
+            flex-shrink: 0;
+        }
+        
+        .leaderboard-item.top3 .rank {
+            background: #fbbf24;
+            color: white;
+        }
+        
+        .leaderboard-item.you .rank {
+            background: #22c55e;
+            color: white;
+        }
+        
+        .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #10b981, #3b82f6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            flex-shrink: 0;
+        }
+        
+        .user-info {
+            flex: 1;
+        }
+        
+        .username {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 4px;
+        }
+        
+        .user-badge {
+            font-size: 12px;
+            color: #6b7280;
+        }
+        
+        .score {
+            font-size: 18px;
+            font-weight: bold;
+            color: #3b82f6;
+            flex-shrink: 0;
+        }
+        
+        .leaderboard-item.you .score {
+            color: #16a34a;
+        }
+        
+        /* Promotion/Demotion Info */
+        .league-info {
+            background: #eff6ff;
+            border: 2px solid #bfdbfe;
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 20px;
+            font-size: 13px;
+            color: #1e40af;
+            line-height: 1.6;
+        }
+        
+        .league-info strong {
+            font-weight: 600;
+        }
+        
+        /* Bottom Tab Bar */
+        .bottom-tab-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0 20px 0;
+            max-width: 428px;
+            margin: 0 auto;
+        }
+        
+        .tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 16px;
+            cursor: pointer;
+            text-decoration: none;
+            color: #9ca3af;
+            transition: color 0.2s;
+        }
+        
+        .tab-item.active {
+            color: #22c55e;
+        }
+        
+        .tab-icon {
+            font-size: 24px;
+        }
+        
+        .tab-label {
+            font-size: 11px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="league-badge">💎</div>
+            <div class="league-name">Sapphire League</div>
+            <div class="time-left">4 days left</div>
+        </div>
+        
+        <!-- Leaderboard -->
+        <div class="leaderboard-container">
+            <div class="leaderboard-header">
+                🏆 Top 10
+            </div>
+            
+            <div class="leaderboard-list">
+                <div class="leaderboard-item top3">
+                    <div class="rank">1</div>
+                    <div class="avatar">👤</div>
+                    <div class="user-info">
+                        <div class="username">Friend1</div>
+                        <div class="user-badge">🔥 30 day streak</div>
+                    </div>
+                    <div class="score">550 LS</div>
+                </div>
+                
+                <div class="leaderboard-item top3">
+                    <div class="rank">2</div>
+                    <div class="avatar">👥</div>
+                    <div class="user-info">
+                        <div class="username">HealthMaster</div>
+                        <div class="user-badge">⭐ Gold badge</div>
+                    </div>
+                    <div class="score">487 LS</div>
+                </div>
+                
+                <div class="leaderboard-item top3">
+                    <div class="rank">3</div>
+                    <div class="avatar">👨</div>
+                    <div class="user-info">
+                        <div class="username">BonePro</div>
+                        <div class="user-badge">💪 Active</div>
+                    </div>
+                    <div class="score">423 LS</div>
+                </div>
+                
+                <div class="leaderboard-item">
+                    <div class="rank">4</div>
+                    <div class="avatar">👩</div>
+                    <div class="user-info">
+                        <div class="username">CalciumQueen</div>
+                        <div class="user-badge">🥛 Nutrition expert</div>
+                    </div>
+                    <div class="score">389 LS</div>
+                </div>
+                
+                <div class="leaderboard-item">
+                    <div class="rank">5</div>
+                    <div class="avatar">🧑</div>
+                    <div class="user-info">
+                        <div class="username">FitLife99</div>
+                        <div class="user-badge">🏃 Runner</div>
+                    </div>
+                    <div class="score">356 LS</div>
+                </div>
+                
+                <div class="leaderboard-item">
+                    <div class="rank">6</div>
+                    <div class="avatar">👤</div>
+                    <div class="user-info">
+                        <div class="username">HealthyHabits</div>
+                        <div class="user-badge">✨ Consistent</div>
+                    </div>
+                    <div class="score">298 LS</div>
+                </div>
+                
+                <div class="leaderboard-item you">
+                    <div class="rank">7</div>
+                    <div class="avatar">😊</div>
+                    <div class="user-info">
+                        <div class="username">You</div>
+                        <div class="user-badge">🔥 6 day streak</div>
+                    </div>
+                    <div class="score">110 LS</div>
+                </div>
+                
+                <div class="leaderboard-item">
+                    <div class="rank">8</div>
+                    <div class="avatar">👥</div>
+                    <div class="user-info">
+                        <div class="username">WellnessWarrior</div>
+                        <div class="user-badge">🌟 Beginner</div>
+                    </div>
+                    <div class="score">95 LS</div>
+                </div>
+                
+                <div class="leaderboard-item">
+                    <div class="rank">9</div>
+                    <div class="avatar">👨</div>
+                    <div class="user-info">
+                        <div class="username">StrongBones</div>
+                        <div class="user-badge">💪 New member</div>
+                    </div>
+                    <div class="score">78 LS</div>
+                </div>
+                
+                <div class="leaderboard-item">
+                    <div class="rank">10</div>
+                    <div class="avatar">👩</div>
+                    <div class="user-info">
+                        <div class="username">HealthSeeker</div>
+                        <div class="user-badge">🌱 Growing</div>
+                    </div>
+                    <div class="score">62 LS</div>
+                </div>
+            </div>
+            
+            <div class="league-info">
+                <strong>💡 League Rules:</strong> Weekly competition based on LS points only. Top 3 promote to Diamond League, bottom 3 move to Bronze League. Keep practicing to climb up!
+            </div>
+        </div>
+        
+        <!-- Bottom Tab Bar -->
+        <div class="bottom-tab-bar">
+            <a href="/home" class="tab-item">
+                <div class="tab-icon">🏠</div>
+                <div class="tab-label">Home</div>
+            </a>
+            <a href="/quests" class="tab-item">
+                <div class="tab-icon">🎯</div>
+                <div class="tab-label">Quests</div>
+            </a>
+            <a href="/league" class="tab-item active">
+                <div class="tab-icon">🏆</div>
+                <div class="tab-label">League</div>
+            </a>
+            <a href="/report" class="tab-item">
+                <div class="tab-icon">📊</div>
+                <div class="tab-label">Report</div>
+            </a>
+            <a href="/profile" class="tab-item">
+                <div class="tab-icon">👤</div>
+                <div class="tab-label">Profile</div>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

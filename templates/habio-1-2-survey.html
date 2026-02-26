@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HABIO - 1-2 Bone Health Risk Survey</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', sans-serif;
+            background: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 428px;
+            margin: 0 auto;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Progress Header */
+        .progress-header {
+            padding: 20px 24px;
+            background: white;
+        }
+        
+        .progress-text {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+        
+        .progress-bar-container {
+            width: 100%;
+            height: 12px;
+            background: #e5e7eb;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: #22c55e;
+            border-radius: 12px;
+            transition: width 0.3s ease;
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 40px 24px;
+        }
+        
+        .character-icon {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 24px;
+            font-size: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .question-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 32px;
+            line-height: 1.4;
+        }
+        
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+        
+        .option-button {
+            width: 100%;
+            padding: 20px 24px;
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 500;
+            color: #1f2937;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .option-button:hover {
+            border-color: #cbd5e1;
+            background: #f9fafb;
+        }
+        
+        .option-button.selected {
+            border-color: #22c55e;
+            background: #f0fdf4;
+        }
+        
+        .option-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        
+        /* Input field for age, height, weight */
+        .input-field {
+            width: 100%;
+            padding: 20px 24px;
+            font-size: 18px;
+            border: 2px solid #e5e7eb;
+            border-radius: 16px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        
+        .input-field:focus {
+            border-color: #22c55e;
+        }
+        
+        /* Navigation Buttons */
+        .nav-buttons {
+            margin-top: auto;
+            padding: 24px;
+            display: flex;
+            gap: 12px;
+            background: white;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .nav-button {
+            flex: 1;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+        
+        .nav-button.previous {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+        
+        .nav-button.previous:hover {
+            background: #e5e7eb;
+        }
+        
+        .nav-button.next {
+            background: #22c55e;
+            color: white;
+        }
+        
+        .nav-button.next:hover {
+            background: #16a34a;
+        }
+        
+        .nav-button.next:disabled {
+            background: #d1d5db;
+            cursor: not-allowed;
+        }
+        
+        .nav-button:active {
+            transform: scale(0.95);
+        }
+        
+        /* Notice text */
+        .notice-text {
+            font-size: 14px;
+            color: #6b7280;
+            text-align: center;
+            padding: 0 24px 24px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Progress Header -->
+        <div class="progress-header">
+            <div class="progress-text">설정 (1/2단계)</div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progressBar" style="width: 8%"></div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="character-icon" id="characterIcon">🦴</div>
+            <h1 class="question-title" id="questionTitle">나이를 선택해주세요</h1>
+            
+            <div id="questionContent">
+                <!-- Question content will be dynamically inserted here -->
+            </div>
+        </div>
+        
+        <!-- Notice Text -->
+        <div class="notice-text">
+            설정을 완료하고 회원가입을 마치면 BDS 기준선(초기 상태 예측)이 표시됩니다.
+        </div>
+        
+        <!-- Navigation Buttons -->
+        <div class="nav-buttons">
+            <button class="nav-button previous" id="prevBtn" onclick="previousQuestion()">이전</button>
+            <button class="nav-button next" id="nextBtn" onclick="nextQuestion()">다음</button>
+        </div>
+    </div>
+    
+    <script>
+        const questions = [
+            {
+                id: 'age',
+                title: '나이를 선택해주세요',
+                type: 'input',
+                inputType: 'number',
+                placeholder: '나이를 입력하세요',
+                icon: '🦴',
+                min: 0,
+                max: 120
+            },
+            {
+                id: 'gender',
+                title: '성별을 선택해주세요',
+                type: 'options',
+                options: [
+                    { value: 'male', label: '남성', icon: '👨' },
+                    { value: 'female', label: '여성', icon: '👩' }
+                ],
+                icon: '🦴'
+            },
+            {
+                id: 'height',
+                title: '키를 입력해주세요',
+                type: 'input',
+                inputType: 'number',
+                placeholder: '키(cm)',
+                icon: '📏',
+                min: 0,
+                max: 220
+            },
+            {
+                id: 'weight',
+                title: '몸무게를 입력해주세요',
+                type: 'input',
+                inputType: 'number',
+                placeholder: '몸무게(kg)',
+                icon: '⚖️',
+                min: 0,
+                max: 200
+            },
+            {
+                id: 'alcohol',
+                title: '음주를 하시나요?',
+                type: 'options',
+                options: [
+                    { value: 'yes', label: '예', icon: '✓' },
+                    { value: 'no', label: '아니오', icon: '✗' }
+                ],
+                icon: '🍺'
+            },
+            {
+                id: 'smoking',
+                title: '흡연을 하시나요?',
+                type: 'options',
+                options: [
+                    { value: 'yes', label: '예', icon: '✓' },
+                    { value: 'no', label: '아니오', icon: '✗' }
+                ],
+                icon: '🚭'
+            },
+            {
+                id: 'parent_osteo',
+                title: '부모 중 골다공증 진단을 받으신 분이 계신가요?',
+                type: 'options',
+                options: [
+                    { value: 'yes', label: '예', icon: '✓' },
+                    { value: 'no', label: '아니오', icon: '✗' },
+                    { value: 'unknown', label: '모름', icon: '?' }
+                ],
+                icon: '👨‍👩‍👧'
+            },
+            {
+                id: 'fracture',
+                title: '골절 경험이 있으신가요?',
+                type: 'options',
+                options: [
+                    { value: 'yes', label: '예', icon: '✓' },
+                    { value: 'no', label: '아니오', icon: '✗' }
+                ],
+                icon: '🦴'
+            },
+            {
+                id: 'rheumatoid',
+                title: '류마티스 관절염이 있으신가요?',
+                type: 'options',
+                options: [
+                    { value: 'yes', label: '예', icon: '✓' },
+                    { value: 'no', label: '아니오', icon: '✗' }
+                ],
+                icon: '🦵'
+            }
+        ];
+        
+        // Additional questions for females
+        const femaleQuestions = [
+            {
+                id: 'estrogen',
+                title: '에스트로겐 관련 약물을 복용 중이신가요?\n(경구 피임약, 여성 호르몬제 등)',
+                type: 'options',
+                options: [
+                    { value: 'yes', label: '예', icon: '✓' },
+                    { value: 'no', label: '아니오', icon: '✗' }
+                ],
+                icon: '💊'
+            },
+            {
+                id: 'menstruation',
+                title: '현재 월경 중이신가요?',
+                type: 'options',
+                options: [
+                    { value: 'yes', label: '예', icon: '✓' },
+                    { value: 'no', label: '아니오', icon: '✗' }
+                ],
+                icon: '📅'
+            },
+            {
+                id: 'menopause',
+                title: '폐경이 되셨나요?',
+                type: 'options',
+                options: [
+                    { value: 'yes', label: '예', icon: '✓' },
+                    { value: 'no', label: '아니오', icon: '✗' }
+                ],
+                icon: '👩'
+            }
+        ];
+        
+        let currentQuestionIndex = 0;
+        let answers = {};
+        let activeQuestions = [...questions];
+        
+        function renderQuestion() {
+            const question = activeQuestions[currentQuestionIndex];
+            const questionContent = document.getElementById('questionContent');
+            const questionTitle = document.getElementById('questionTitle');
+            const characterIcon = document.getElementById('characterIcon');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            questionTitle.textContent = question.title;
+            characterIcon.textContent = question.icon;
+            
+            // Update progress bar
+            const progress = ((currentQuestionIndex + 1) / activeQuestions.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            
+            // Enable/disable previous button
+            prevBtn.disabled = currentQuestionIndex === 0;
+            prevBtn.style.opacity = currentQuestionIndex === 0 ? '0.5' : '1';
+            
+            if (question.type === 'input') {
+                questionContent.innerHTML = `
+                    <input 
+                        type="${question.inputType}" 
+                        class="input-field" 
+                        id="inputField"
+                        placeholder="${question.placeholder}"
+                        value="${answers[question.id] || ''}"
+                        min="${question.min || 0}"
+                        max="${question.max || ''}"
+                    />
+                `;
+                
+                const inputField = document.getElementById('inputField');
+                inputField.addEventListener('input', (e) => {
+                    let value = e.target.value;
+                    const min = question.min || 0;
+                    const max = question.max;
+                    
+                    // Prevent negative values
+                    if (value < 0) {
+                        e.target.value = 0;
+                        value = 0;
+                    }
+                    
+                    // Prevent values exceeding max
+                    if (max && value > max) {
+                        e.target.value = max;
+                        value = max;
+                    }
+                    
+                    answers[question.id] = value;
+                    nextBtn.disabled = !value;
+                });
+                
+                nextBtn.disabled = !answers[question.id];
+                
+            } else if (question.type === 'options') {
+                const optionsHtml = question.options.map(option => `
+                    <button 
+                        class="option-button ${answers[question.id] === option.value ? 'selected' : ''}" 
+                        onclick="selectOption('${question.id}', '${option.value}')"
+                    >
+                        <span class="option-icon">${option.icon}</span>
+                        <span>${option.label}</span>
+                    </button>
+                `).join('');
+                
+                questionContent.innerHTML = `<div class="options-container">${optionsHtml}</div>`;
+                nextBtn.disabled = !answers[question.id];
+            }
+        }
+        
+        function selectOption(questionId, value) {
+            answers[questionId] = value;
+            
+            // If gender is selected and it's female, add female-specific questions
+            if (questionId === 'gender') {
+                if (value === 'female' && !activeQuestions.some(q => q.id === 'estrogen')) {
+                    activeQuestions = [...questions, ...femaleQuestions];
+                } else if (value === 'male') {
+                    activeQuestions = [...questions];
+                }
+            }
+            
+            renderQuestion();
+        }
+        
+        function nextQuestion() {
+            if (currentQuestionIndex < activeQuestions.length - 1) {
+                currentQuestionIndex++;
+                renderQuestion();
+            } else {
+                // Save survey data to localStorage before navigating
+                localStorage.setItem('surveyAnswers', JSON.stringify(answers));
+                console.log('Survey data saved:', answers);
+                
+                // Navigate to 1-3 Sign up
+                window.location.href = '/signup';
+            }
+        }
+        
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                renderQuestion();
+            }
+        }
+        
+        // Initialize
+        renderQuestion();
+    </script>
+</body>
+</html>

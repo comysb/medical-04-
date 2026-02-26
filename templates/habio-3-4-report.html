@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HABIO - 3-4 Report</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 428px;
+            margin: 0 auto;
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+        
+        /* Header */
+        .header {
+            padding: 16px 20px;
+            background: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .header h1 {
+            font-size: 22px;
+            font-weight: bold;
+            color: #1f2937;
+        }
+        
+        .updated-label {
+            font-size: 12px;
+            color: #6b7280;
+            background: #f3f4f6;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+        
+        /* Main Content */
+        .main-content {
+            padding: 20px;
+        }
+        
+        /* BDS Card */
+        .bds-card {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .card-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1f2937;
+        }
+        
+        .info-icon {
+            font-size: 20px;
+            cursor: pointer;
+        }
+        
+        .bds-value-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .bds-value {
+            font-size: 48px;
+            font-weight: bold;
+            color: #f59e0b;
+            margin-bottom: 8px;
+        }
+        
+        .bds-label {
+            font-size: 16px;
+            font-weight: 600;
+            color: #f59e0b;
+            margin-bottom: 4px;
+        }
+        
+        .bds-trend {
+            font-size: 14px;
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        
+        .trend-chart {
+            width: 100%;
+            height: 100px;
+            background: #f9fafb;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: flex-end;
+            padding: 10px;
+            gap: 4px;
+        }
+        
+        .chart-bar {
+            flex: 1;
+            background: linear-gradient(to top, #fbbf24, #f59e0b);
+            border-radius: 4px 4px 0 0;
+            min-height: 20px;
+        }
+        
+        .disclaimer {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            border-radius: 12px;
+            padding: 12px;
+            font-size: 13px;
+            color: #92400e;
+            line-height: 1.5;
+        }
+        
+        /* Section Card */
+        .section-card {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 16px;
+        }
+        
+        .factor-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .factor-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px;
+            background: #f9fafb;
+            border-radius: 12px;
+        }
+        
+        .factor-icon {
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+        
+        .factor-text {
+            flex: 1;
+            font-size: 14px;
+            color: #374151;
+            line-height: 1.5;
+        }
+        
+        /* Suggestion Card */
+        .suggestion-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: #f0fdf4;
+            border: 2px solid #bbf7d0;
+            border-radius: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .suggestion-icon {
+            font-size: 28px;
+            flex-shrink: 0;
+        }
+        
+        .suggestion-content {
+            flex: 1;
+        }
+        
+        .suggestion-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #166534;
+            margin-bottom: 4px;
+        }
+        
+        .suggestion-desc {
+            font-size: 13px;
+            color: #15803d;
+        }
+        
+        .add-button {
+            padding: 8px 16px;
+            background: #22c55e;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        
+        /* Recommendations */
+        .recommendation-card {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .recommendation-card:hover {
+            border-color: #22c55e;
+        }
+        
+        .rec-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+        
+        .rec-icon {
+            font-size: 32px;
+        }
+        
+        .rec-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+        
+        .rec-desc {
+            font-size: 13px;
+            color: #6b7280;
+            line-height: 1.5;
+        }
+        
+        .read-more {
+            font-size: 13px;
+            color: #3b82f6;
+            font-weight: 600;
+            margin-top: 8px;
+            display: inline-block;
+        }
+        
+        /* Bottom Tab Bar */
+        .bottom-tab-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0 20px 0;
+            max-width: 428px;
+            margin: 0 auto;
+        }
+        
+        .tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 16px;
+            cursor: pointer;
+            text-decoration: none;
+            color: #9ca3af;
+            transition: color 0.2s;
+        }
+        
+        .tab-item.active {
+            color: #22c55e;
+        }
+        
+        .tab-icon {
+            font-size: 24px;
+        }
+        
+        .tab-label {
+            font-size: 11px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>My Report</h1>
+            <div class="updated-label">Updated today</div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- BDS Card -->
+            <div class="bds-card">
+                <div class="card-header">
+                    <div class="card-title">Bone Health Indicator (BDS)</div>
+                    <div class="info-icon">ℹ️</div>
+                </div>
+                
+                <div class="bds-value-container">
+                    <div class="bds-value" id="bdsValue">72</div>
+                    <div class="bds-label" id="bdsLabel">Moderate</div>
+                    <div class="bds-trend">
+                        <span>📈</span>
+                        <span id="bdsDescription">Based on your health profile</span>
+                    </div>
+                </div>
+                
+                <div class="trend-chart">
+                    <div class="chart-bar" style="height: 60%"></div>
+                    <div class="chart-bar" style="height: 65%"></div>
+                    <div class="chart-bar" style="height: 58%"></div>
+                    <div class="chart-bar" style="height: 70%"></div>
+                    <div class="chart-bar" style="height: 72%"></div>
+                    <div class="chart-bar" style="height: 71%"></div>
+                    <div class="chart-bar" style="height: 72%"></div>
+                </div>
+                
+                <div class="disclaimer">
+                    ⚠️ <strong>정보 제공용입니다.</strong> 의학적 진단이 아닙니다. 궁금한 점이 있으시면 전문가와 상담하세요.
+                </div>
+            </div>
+            
+            <!-- Influencing Factors -->
+            <div class="section-card">
+                <div class="section-title">영향 가능 요인</div>
+                <div class="factor-list">
+                    <div class="factor-item">
+                        <div class="factor-icon">🥛</div>
+                        <div class="factor-text">
+                            <strong>칼슘 섭취 빈도 낮음</strong> (가능성 있음)<br>
+                            유제품, 멸치, 브로콜리 등 칼슘이 풍부한 음식을 더 자주 섭취해보세요.
+                        </div>
+                    </div>
+                    <div class="factor-item">
+                        <div class="factor-icon">🏃</div>
+                        <div class="factor-text">
+                            <strong>체중 부하 운동 부족</strong> (가능성 있음)<br>
+                            걷기, 조깅, 계단 오르기 등의 활동을 늘려보세요.
+                        </div>
+                    </div>
+                    <div class="factor-item">
+                        <div class="factor-icon">🚭</div>
+                        <div class="factor-text">
+                            <strong>흡연/음주</strong><br>
+                            흡연과 과도한 음주는 골건강에 영향을 줄 수 있습니다.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Suggested Actions -->
+            <div class="section-card">
+                <div class="section-title">추천 활동 (선택사항)</div>
+                
+                <div class="suggestion-item">
+                    <div class="suggestion-icon">🥛</div>
+                    <div class="suggestion-content">
+                        <div class="suggestion-title">칼슘 섭취 기록하기</div>
+                        <div class="suggestion-desc">하루 우유 1잔 또는 요거트</div>
+                    </div>
+                    <button class="add-button">추가</button>
+                </div>
+                
+                <div class="suggestion-item">
+                    <div class="suggestion-icon">☀️</div>
+                    <div class="suggestion-content">
+                        <div class="suggestion-title">햇빛 쬐기 (비타민D)</div>
+                        <div class="suggestion-desc">15분 야외 활동</div>
+                    </div>
+                    <button class="add-button">추가</button>
+                </div>
+                
+                <div class="suggestion-item">
+                    <div class="suggestion-icon">🚶</div>
+                    <div class="suggestion-content">
+                        <div class="suggestion-title">30분 걷기</div>
+                        <div class="suggestion-desc">체중 부하 운동</div>
+                    </div>
+                    <button class="add-button">추가</button>
+                </div>
+                
+                <p style="font-size: 13px; color: #6b7280; margin-top: 12px; text-align: center;">
+                    💡 제안은 선택사항입니다
+                </p>
+            </div>
+            
+            <!-- Nutrition & Exercise Recommendations -->
+            <div class="section-card">
+                <div class="section-title">영양 & 운동 가이드</div>
+                
+                <div class="recommendation-card">
+                    <div class="rec-header">
+                        <div class="rec-icon">🥗</div>
+                        <div class="rec-title">칼슘이 풍부한 음식</div>
+                    </div>
+                    <div class="rec-desc">
+                        우유, 치즈, 요거트, 멸치, 두부, 브로콜리, 케일 등
+                    </div>
+                    <span class="read-more">더 알아보기 →</span>
+                </div>
+                
+                <div class="recommendation-card">
+                    <div class="rec-header">
+                        <div class="rec-icon">☀️</div>
+                        <div class="rec-title">비타민D 합성</div>
+                    </div>
+                    <div class="rec-desc">
+                        하루 15-30분 햇빛 노출, 연어, 고등어, 달걀노른자
+                    </div>
+                    <span class="read-more">더 알아보기 →</span>
+                </div>
+                
+                <div class="recommendation-card">
+                    <div class="rec-header">
+                        <div class="rec-icon">💪</div>
+                        <div class="rec-title">체중 부하 운동</div>
+                    </div>
+                    <div class="rec-desc">
+                        걷기, 조깅, 계단 오르기, 댄스, 근력 운동
+                    </div>
+                    <span class="read-more">더 알아보기 →</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bottom Tab Bar -->
+        <div class="bottom-tab-bar">
+            <a href="/home" class="tab-item">
+                <div class="tab-icon">🏠</div>
+                <div class="tab-label">Home</div>
+            </a>
+            <a href="/quests" class="tab-item">
+                <div class="tab-icon">🎯</div>
+                <div class="tab-label">Quests</div>
+            </a>
+            <a href="/league" class="tab-item">
+                <div class="tab-icon">🏆</div>
+                <div class="tab-label">League</div>
+            </a>
+            <a href="/report" class="tab-item active">
+                <div class="tab-icon">📊</div>
+                <div class="tab-label">Report</div>
+            </a>
+            <a href="/profile" class="tab-item">
+                <div class="tab-icon">👤</div>
+                <div class="tab-label">Profile</div>
+            </a>
+        </div>
+    </div>
+    
+    <script>
+        // Load BDS from localStorage
+        window.addEventListener('DOMContentLoaded', () => {
+            const userBDS = localStorage.getItem('userBDS');
+            const userCategory = localStorage.getItem('userBDSCategory');
+            
+            if (userBDS && userCategory) {
+                // Update BDS display
+                document.getElementById('bdsValue').textContent = userBDS;
+                document.getElementById('bdsLabel').textContent = userCategory;
+                
+                // Update description based on category
+                const descriptions = {
+                    'Good': '건강한 상태입니다',
+                    'Moderate': '주의가 필요합니다',
+                    'Caution': '관리가 필요합니다'
+                };
+                document.getElementById('bdsDescription').textContent = 
+                    descriptions[userCategory] || 'Based on your health profile';
+                
+                console.log('BDS loaded:', userBDS, userCategory);
+            } else {
+                console.log('No BDS data found in localStorage');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HABIO - 4-2 Friends</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 428px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+        }
+        
+        /* Header */
+        .header {
+            padding: 16px 20px;
+            background: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .header h1 {
+            font-size: 22px;
+            font-weight: bold;
+            color: #1f2937;
+        }
+        
+        .search-icon {
+            font-size: 24px;
+            cursor: pointer;
+            color: #6b7280;
+        }
+        
+        /* Find Friends Card */
+        .find-friends-card {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            padding: 24px 20px;
+            margin: 20px;
+            border-radius: 20px;
+            color: white;
+            text-align: center;
+        }
+        
+        .find-friends-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 16px;
+        }
+        
+        .find-friends-button {
+            width: 100%;
+            padding: 14px;
+            background: white;
+            color: #2563eb;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 12px;
+        }
+        
+        .find-options {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 12px;
+        }
+        
+        .find-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            opacity: 0.9;
+            transition: opacity 0.2s;
+        }
+        
+        .find-option:hover {
+            opacity: 1;
+        }
+        
+        .find-option-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        .find-option-label {
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        /* Friends List */
+        .friends-section {
+            padding: 20px;
+        }
+        
+        .section-header {
+            font-size: 16px;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 16px;
+        }
+        
+        .friend-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: #f9fafb;
+            border-radius: 16px;
+            margin-bottom: 12px;
+        }
+        
+        .friend-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #10b981, #3b82f6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            flex-shrink: 0;
+        }
+        
+        .friend-info {
+            flex: 1;
+        }
+        
+        .friend-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 4px;
+        }
+        
+        .friend-stat {
+            font-size: 13px;
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .friend-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .friend-action-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .high-five-btn {
+            background: #22c55e;
+            color: white;
+        }
+        
+        .profile-btn {
+            background: #e5e7eb;
+            color: #374151;
+        }
+        
+        /* Feed Section */
+        .feed-section {
+            padding: 20px;
+            border-top: 8px solid #f5f5f5;
+        }
+        
+        .feed-card {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .feed-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .feed-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f59e0b, #ef4444);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        
+        .feed-user-info {
+            flex: 1;
+        }
+        
+        .feed-username {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+        
+        .feed-time {
+            font-size: 12px;
+            color: #9ca3af;
+        }
+        
+        .feed-content {
+            background: #f0fdf4;
+            border: 2px solid #bbf7d0;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+        
+        .feed-achievement-icon {
+            font-size: 40px;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+        
+        .feed-text {
+            font-size: 14px;
+            color: #166534;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .feed-actions {
+            display: flex;
+            gap: 16px;
+        }
+        
+        .feed-action {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #6b7280;
+            font-size: 14px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .feed-action:hover {
+            color: #1f2937;
+        }
+        
+        .feed-action.active {
+            color: #22c55e;
+        }
+        
+        /* Bottom Tab Bar */
+        .bottom-tab-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0 20px 0;
+            max-width: 428px;
+            margin: 0 auto;
+        }
+        
+        .tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 16px;
+            cursor: pointer;
+            text-decoration: none;
+            color: #9ca3af;
+            transition: color 0.2s;
+        }
+        
+        .tab-item.active {
+            color: #22c55e;
+        }
+        
+        .tab-icon {
+            font-size: 24px;
+        }
+        
+        .tab-label {
+            font-size: 11px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Friends</h1>
+            <div class="search-icon">🔍</div>
+        </div>
+        
+        <!-- Find Friends Card -->
+        <div class="find-friends-card">
+            <div class="find-friends-title">Find Friends</div>
+            <button class="find-friends-button">Add Friends</button>
+            
+            <div class="find-options">
+                <div class="find-option">
+                    <div class="find-option-icon">👥</div>
+                    <div class="find-option-label">Contacts</div>
+                </div>
+                <div class="find-option">
+                    <div class="find-option-icon">🔗</div>
+                    <div class="find-option-label">Invite Link</div>
+                </div>
+                <div class="find-option">
+                    <div class="find-option-icon">📱</div>
+                    <div class="find-option-label">QR Code</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Friends List -->
+        <div class="friends-section">
+            <div class="section-header">My Friends</div>
+            
+            <div class="friend-item">
+                <div class="friend-avatar">👤</div>
+                <div class="friend-info">
+                    <div class="friend-name">Friend1</div>
+                    <div class="friend-stat">
+                        <span>🔥 30 day streak</span>
+                        <span>•</span>
+                        <span>550 LS this week</span>
+                    </div>
+                </div>
+                <div class="friend-actions">
+                    <button class="friend-action-btn high-five-btn">👏</button>
+                    <button class="friend-action-btn profile-btn">Profile</button>
+                </div>
+            </div>
+            
+            <div class="friend-item">
+                <div class="friend-avatar">👥</div>
+                <div class="friend-info">
+                    <div class="friend-name">HealthMaster</div>
+                    <div class="friend-stat">
+                        <span>🔥 15 day streak</span>
+                        <span>•</span>
+                        <span>320 LS this week</span>
+                    </div>
+                </div>
+                <div class="friend-actions">
+                    <button class="friend-action-btn high-five-btn">👏</button>
+                    <button class="friend-action-btn profile-btn">Profile</button>
+                </div>
+            </div>
+            
+            <div class="friend-item">
+                <div class="friend-avatar">👨</div>
+                <div class="friend-info">
+                    <div class="friend-name">BonePro</div>
+                    <div class="friend-stat">
+                        <span>🔥 8 day streak</span>
+                        <span>•</span>
+                        <span>245 LS this week</span>
+                    </div>
+                </div>
+                <div class="friend-actions">
+                    <button class="friend-action-btn high-five-btn">👏</button>
+                    <button class="friend-action-btn profile-btn">Profile</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Feed Section -->
+        <div class="feed-section">
+            <div class="section-header">Friend Activity</div>
+            
+            <div class="feed-card">
+                <div class="feed-header">
+                    <div class="feed-avatar">👤</div>
+                    <div class="feed-user-info">
+                        <div class="feed-username">Friend1</div>
+                        <div class="feed-time">2 hours ago</div>
+                    </div>
+                </div>
+                <div class="feed-content">
+                    <div class="feed-achievement-icon">🔥🔥🔥</div>
+                    <div class="feed-text">Completed 3 quests in a row!</div>
+                </div>
+                <div class="feed-actions">
+                    <div class="feed-action active">
+                        <span>👏</span>
+                        <span>High five (5)</span>
+                    </div>
+                    <div class="feed-action">
+                        <span>💬</span>
+                        <span>Comment</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="feed-card">
+                <div class="feed-header">
+                    <div class="feed-avatar" style="background: linear-gradient(135deg, #10b981, #3b82f6);">👥</div>
+                    <div class="feed-user-info">
+                        <div class="feed-username">You and Friend1</div>
+                        <div class="feed-time">5 hours ago</div>
+                    </div>
+                </div>
+                <div class="feed-content">
+                    <div class="feed-achievement-icon">🎉</div>
+                    <div class="feed-text">Finished a Friends Quest together!</div>
+                </div>
+                <div class="feed-actions">
+                    <div class="feed-action">
+                        <span>👏</span>
+                        <span>High five (12)</span>
+                    </div>
+                    <div class="feed-action">
+                        <span>💬</span>
+                        <span>Comment</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="feed-card">
+                <div class="feed-header">
+                    <div class="feed-avatar" style="background: linear-gradient(135deg, #8b5cf6, #6366f1);">👨</div>
+                    <div class="feed-user-info">
+                        <div class="feed-username">BonePro</div>
+                        <div class="feed-time">1 day ago</div>
+                    </div>
+                </div>
+                <div class="feed-content">
+                    <div class="feed-achievement-icon">🏆</div>
+                    <div class="feed-text">Earned Weekly Badge!</div>
+                </div>
+                <div class="feed-actions">
+                    <div class="feed-action">
+                        <span>👏</span>
+                        <span>High five (8)</span>
+                    </div>
+                    <div class="feed-action">
+                        <span>💬</span>
+                        <span>Comment</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bottom Tab Bar -->
+        <div class="bottom-tab-bar">
+            <a href="/home" class="tab-item">
+                <div class="tab-icon">🏠</div>
+                <div class="tab-label">Home</div>
+            </a>
+            <a href="/quests" class="tab-item">
+                <div class="tab-icon">🎯</div>
+                <div class="tab-label">Quests</div>
+            </a>
+            <a href="/league" class="tab-item">
+                <div class="tab-icon">🏆</div>
+                <div class="tab-label">League</div>
+            </a>
+            <a href="/report" class="tab-item">
+                <div class="tab-icon">📊</div>
+                <div class="tab-label">Report</div>
+            </a>
+            <a href="/profile" class="tab-item">
+                <div class="tab-icon">👤</div>
+                <div class="tab-label">Profile</div>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

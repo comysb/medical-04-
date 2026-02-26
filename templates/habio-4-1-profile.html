@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HABIO - 4-1 Profile</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 428px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+        }
+        
+        /* Header */
+        .header {
+            padding: 16px 20px;
+            background: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .header h1 {
+            font-size: 22px;
+            font-weight: bold;
+            color: #1f2937;
+        }
+        
+        .settings-icon {
+            font-size: 24px;
+            cursor: pointer;
+            color: #6b7280;
+        }
+        
+        /* Profile Card */
+        .profile-card {
+            padding: 32px 20px;
+            text-align: center;
+            background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+            color: white;
+        }
+        
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: white;
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .username {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+        
+        .user-handle {
+            font-size: 15px;
+            opacity: 0.9;
+            margin-bottom: 4px;
+        }
+        
+        .join-date {
+            font-size: 13px;
+            opacity: 0.8;
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            padding: 24px 20px;
+            background: white;
+            border-bottom: 8px solid #f5f5f5;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-icon {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+        
+        .stat-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 4px;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 600;
+        }
+        
+        /* Action Buttons */
+        .action-buttons {
+            padding: 20px;
+            display: flex;
+            gap: 12px;
+            background: white;
+            border-bottom: 8px solid #f5f5f5;
+        }
+        
+        .action-button {
+            flex: 1;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+        
+        .action-button.primary {
+            background: #22c55e;
+            color: white;
+        }
+        
+        .action-button.secondary {
+            background: #f3f4f6;
+            color: #374151;
+            border: 2px solid #e5e7eb;
+        }
+        
+        .action-button:active {
+            transform: scale(0.98);
+        }
+        
+        /* Menu List */
+        .menu-section {
+            padding: 20px;
+            background: white;
+        }
+        
+        .menu-section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+        
+        .menu-list {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            background: white;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .menu-item:hover {
+            background: #f9fafb;
+        }
+        
+        .menu-item-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .menu-icon {
+            font-size: 24px;
+        }
+        
+        .menu-text {
+            font-size: 15px;
+            color: #1f2937;
+            font-weight: 500;
+        }
+        
+        .menu-arrow {
+            font-size: 16px;
+            color: #9ca3af;
+        }
+        
+        /* Achievements Section */
+        .achievements-section {
+            padding: 20px;
+            background: white;
+            border-top: 8px solid #f5f5f5;
+        }
+        
+        .achievements-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .achievements-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #1f2937;
+        }
+        
+        .view-all {
+            font-size: 14px;
+            color: #3b82f6;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+        
+        .badge-item {
+            text-align: center;
+        }
+        
+        .badge-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 8px;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            box-shadow: 0 2px 8px rgba(251, 191, 36, 0.3);
+        }
+        
+        .badge-item.locked .badge-icon {
+            background: #e5e7eb;
+            box-shadow: none;
+        }
+        
+        .badge-name {
+            font-size: 11px;
+            color: #6b7280;
+            font-weight: 600;
+        }
+        
+        /* Bottom Tab Bar */
+        .bottom-tab-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0 20px 0;
+            max-width: 428px;
+            margin: 0 auto;
+        }
+        
+        .tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 16px;
+            cursor: pointer;
+            text-decoration: none;
+            color: #9ca3af;
+            transition: color 0.2s;
+        }
+        
+        .tab-item.active {
+            color: #22c55e;
+        }
+        
+        .tab-icon {
+            font-size: 24px;
+        }
+        
+        .tab-label {
+            font-size: 11px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Profile</h1>
+            <div class="settings-icon">⚙️</div>
+        </div>
+        
+        <!-- Profile Card -->
+        <div class="profile-card">
+            <div class="avatar">😊</div>
+            <div class="username">User1</div>
+            <div class="user-handle">@user1</div>
+            <div class="join-date">Joined 2026</div>
+        </div>
+        
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-icon">🔥</div>
+                <div class="stat-value">6</div>
+                <div class="stat-label">Streak</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon">💎</div>
+                <div class="stat-value">Sapphire</div>
+                <div class="stat-label">League</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon">⚡</div>
+                <div class="stat-value">8,480</div>
+                <div class="stat-label">Total LS</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon">🏅</div>
+                <div class="stat-value">14</div>
+                <div class="stat-label">Badges</div>
+            </div>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="action-button primary" onclick="window.location.href='/friends'">
+                Add Friends
+            </button>
+            <button class="action-button secondary">
+                View Badges
+            </button>
+        </div>
+        
+        <!-- Achievements Section -->
+        <div class="achievements-section">
+            <div class="achievements-header">
+                <div class="achievements-title">Recent Achievements</div>
+                <div class="view-all">View All</div>
+            </div>
+            <div class="badges-grid">
+                <div class="badge-item">
+                    <div class="badge-icon">🏆</div>
+                    <div class="badge-name">Starter</div>
+                </div>
+                <div class="badge-item">
+                    <div class="badge-icon">🔥</div>
+                    <div class="badge-name">Week 1</div>
+                </div>
+                <div class="badge-item">
+                    <div class="badge-icon">💪</div>
+                    <div class="badge-name">Active</div>
+                </div>
+                <div class="badge-item locked">
+                    <div class="badge-icon">🔒</div>
+                    <div class="badge-name">Locked</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Menu Section -->
+        <div class="menu-section">
+            <div class="menu-section-title">Account</div>
+            <div class="menu-list">
+                <div class="menu-item">
+                    <div class="menu-item-left">
+                        <div class="menu-icon">🔔</div>
+                        <div class="menu-text">Notifications</div>
+                    </div>
+                    <div class="menu-arrow">›</div>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-item-left">
+                        <div class="menu-icon">🎯</div>
+                        <div class="menu-text">Goals</div>
+                    </div>
+                    <div class="menu-arrow">›</div>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-item-left">
+                        <div class="menu-icon">🔗</div>
+                        <div class="menu-text">Data Connections</div>
+                    </div>
+                    <div class="menu-arrow">›</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="menu-section">
+            <div class="menu-section-title">Privacy</div>
+            <div class="menu-list">
+                <div class="menu-item">
+                    <div class="menu-item-left">
+                        <div class="menu-icon">🔒</div>
+                        <div class="menu-text">Data & Privacy</div>
+                    </div>
+                    <div class="menu-arrow">›</div>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-item-left">
+                        <div class="menu-icon">📥</div>
+                        <div class="menu-text">Export Data</div>
+                    </div>
+                    <div class="menu-arrow">›</div>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-item-left">
+                        <div class="menu-icon">🗑️</div>
+                        <div class="menu-text">Delete Data</div>
+                    </div>
+                    <div class="menu-arrow">›</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bottom Tab Bar -->
+        <div class="bottom-tab-bar">
+            <a href="/home" class="tab-item">
+                <div class="tab-icon">🏠</div>
+                <div class="tab-label">Home</div>
+            </a>
+            <a href="/quests" class="tab-item">
+                <div class="tab-icon">🎯</div>
+                <div class="tab-label">Quests</div>
+            </a>
+            <a href="/league" class="tab-item">
+                <div class="tab-icon">🏆</div>
+                <div class="tab-label">League</div>
+            </a>
+            <a href="/report" class="tab-item">
+                <div class="tab-icon">📊</div>
+                <div class="tab-label">Report</div>
+            </a>
+            <a href="/profile" class="tab-item active">
+                <div class="tab-icon">👤</div>
+                <div class="tab-label">Profile</div>
+            </a>
+        </div>
+    </div>
+</body>
+</html>
